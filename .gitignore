@@ -1,0 +1,7 @@
+git_init.ipynb
+git_push.ipynb
+**/data/**
+**/model/**
+**/models/**
+**/pretrained/**
+**/__pycache__/**

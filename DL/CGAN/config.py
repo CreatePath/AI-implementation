@@ -1,0 +1,23 @@
+SEED = 123
+ROOT = "./data"
+MODELPATH = "./models/"
+IMAGEPATH = "./results/imgs/"
+N_SAMPLES = 10
+
+WIDTH = 28
+HEIGHT = 28
+NUM_CLASSES = 10
+
+DIM_Z = 100
+DIM_Y = 10
+DIM_X = 784
+
+IN_G = DIM_Z + DIM_Y
+IN_D = DIM_X + DIM_Y
+HIDDEN_G = [200, 400, 600, 800, 1000, 1200]
+HIDDEN_D = [1024, 512, 256, 64]
+OUT_G = DIM_X
+OUT_D = 1
+
+DROPOUT_G = 0.3
+DROPOUT_D = 0.3
