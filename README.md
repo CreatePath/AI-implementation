@@ -28,9 +28,6 @@
 - [ ] GPT
 
 ## RL
-- [x] Policy iter & Value iter
-- [x] Dynamic-Programming
-- [x] Monte-Carlo
 - [x] DQN
 - [x] A2C
 - [x] DDPG
