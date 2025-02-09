@@ -12,7 +12,7 @@
 
 #### GANs
 - [x] GAN **([Generative Adversarial Networks](https://arxiv.org/abs/1406.2661) | [Code](https://github.com/CreatePath/AI-implementation/tree/master/DL/GAN))**
-- [x] CGAN **([Conditional Generative Adeversarial Nets](https://arxiv.org/abs/1411.1784) | [Code](https://github.com/CreatePath/AI-implementation/tree/master/DL/CGAN))**
+- [x] CGAN **([Conditional Generative Adversarial Nets](https://arxiv.org/abs/1411.1784) | [Code](https://github.com/CreatePath/AI-implementation/tree/master/DL/CGAN))**
 - [ ] DCGAN
 - [ ] WGAN-GP
 - [ ] StyleGAN
