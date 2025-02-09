@@ -5,3 +5,5 @@ git_push.ipynb
 **/models/**
 **/pretrained/**
 **/__pycache__/**
+**/samples/**
+**/sample/**
