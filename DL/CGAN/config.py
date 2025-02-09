@@ -1,7 +1,7 @@
 SEED = 123
 ROOT = "./data"
 MODELPATH = "./models/"
-IMAGEPATH = "./results/imgs/"
+IMAGEPATH = "./samples/"
 N_SAMPLES = 10
 
 WIDTH = 28

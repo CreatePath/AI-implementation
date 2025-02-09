@@ -1,5 +1,6 @@
 import argparse
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 import torch
 from torch import optim, nn
@@ -105,27 +106,36 @@ def train(epochs,
     num_batches = len(tr_loader)
 
     for epoch in range(epochs):
-        loss_d = 0
-        loss_g = 0
-        for i, (imgs, labels) in enumerate(tr_loader):
-            real_imgs = imgs.flatten(start_dim=1).to(device)
-            real_labels = F.one_hot(labels, config.NUM_CLASSES).to(device)
+        avg_loss_d = 0
+        avg_loss_g = 0
+        with tqdm(tr_loader) as pbar:
+            pbar.set_description("Epoch {}".format(epoch+1))
+            for i, (imgs, labels) in enumerate(pbar):
+                real_imgs = imgs.flatten(start_dim=1).to(device)
+                real_labels = F.one_hot(labels, config.NUM_CLASSES).to(device)
 
-            loss_d += train_discriminator_onestep(nets, opt_d, real_imgs, real_labels, criterion, device)
-            loss_g += train_generator_onestep(nets, opt_g, real_imgs.shape[0], criterion, device)
+                loss_d = train_discriminator_onestep(nets, opt_d, real_imgs, real_labels, criterion, device)
+                loss_g = train_generator_onestep(nets, opt_g, real_imgs.shape[0], criterion, device)
 
-        loss_d /= num_batches
-        loss_g /= num_batches
+                avg_loss_d += loss_d
+                avg_loss_g += loss_g
 
-        train_loss_history["generator"].append(loss_g)
-        train_loss_history["discriminator"].append(loss_d)
-        print(f"Epoch {epoch+1} / {epochs} Train loss_D: {loss_d}, loss_G: {loss_g}")
+                pbar.set_postfix(loss_d=loss_d, loss_g=loss_g)
+
+        avg_loss_d /= num_batches
+        avg_loss_g /= num_batches
+
+        train_loss_history["generator"].append(avg_loss_g)
+        train_loss_history["discriminator"].append(avg_loss_d)
+        print(f"Epoch {epoch+1} / {epochs} Train loss_D: {avg_loss_d}, loss_G: {avg_loss_g}")
 
         loss_d_val, loss_g_val = evaluate(nets, val_loader, criterion, device)
         val_loss_history["discriminator"].append(loss_d_val)
         val_loss_history["generator"].append(loss_g_val)
 
         print(f"Epoch {epoch+1} / {epochs} Val loss_D: {loss_d_val}, loss_G: {loss_g_val}")
+
+        visualize_history(train_loss_history, val_loss_history)
 
         generator.eval()
         with torch.no_grad():
@@ -274,19 +284,20 @@ def visualize_history(train_loss_history, val_loss_history):
     plt.plot(val_x, val_loss_history["discriminator"], label="Validation_Loss_D")
     plt.legend()
     plt.savefig("./results/loss_history.png")
+    plt.close()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--epochs", dest="epochs", action="store", type=int, default=200)
     parser.add_argument("--lr_g", dest="lr_g", action="store", type=float, default=1e-4)
-    parser.add_argument("--lr_d", dest="lr_d", action="store", type=float, default=1e-4)
-    parser.add_argument("--weight_decay_g", dest="weight_decay_g", action="store", type=float, default=1e-3)
-    parser.add_argument("--weight_decay_d", dest="weight_decay_d", action="store", type=float, default=1e-3)
+    parser.add_argument("--lr_d", dest="lr_d", action="store", type=float, default=1e-5)
+    parser.add_argument("--weight_decay_g", dest="weight_decay_g", action="store", type=float, default=1e-9)
+    parser.add_argument("--weight_decay_d", dest="weight_decay_d", action="store", type=float, default=1e-5)
     parser.add_argument("--device", dest="device", action="store", type=str, default="cpu")
-    parser.add_argument("--split_ratio", dest="split_ratio", action="store", type=float, default=0.2)
-    parser.add_argument("--batch_size", dest="batch_size", action="store", type=int, default=32)
+    parser.add_argument("--split_ratio", dest="split_ratio", action="store", type=float, default=0.1)
+    parser.add_argument("--batch_size", dest="batch_size", action="store", type=int, default=64)
     parser.add_argument("--pretrained", dest="pretrained", action="store", type=str, default=None)
-    parser.add_argument("--dropout", dest="dropout", action="store", type=float, default=0.3)
+    parser.add_argument("--dropout", dest="dropout", action="store", type=float, default=0.1)
     parser.add_argument("--train", dest="train", action="store_true")
     args = parser.parse_args()
 
