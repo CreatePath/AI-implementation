@@ -7,7 +7,7 @@
 - [x] ResNet **([Deep Residual Learning for Image Recognition](https://arxiv.org/abs/1512.03385) | [Code](https://github.com/CreatePath/AI-implementation/tree/master/DL/ResNet))**
 
 #### Transformer
-- [ ] ViT
+- [x] ViT **([An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale](https://arxiv.org/abs/2010.11929) | [Code](https://github.com/CreatePath/AI-implementation/blob/master/DL/ViT/SimpleViT_CIFAR10.ipynb))**
 - [ ] EfficientViT
 
 #### GANs
